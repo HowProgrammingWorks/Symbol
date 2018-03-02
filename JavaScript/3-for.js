@@ -23,3 +23,6 @@ console.log('key for symbol from global registry list:',
 console.log('key for symbol which isnt in global registry list:', 
   Symbol.keyFor(symbol3)
 );
+
+
+console.log(symbol1[Symbol.toPrimitive]());
