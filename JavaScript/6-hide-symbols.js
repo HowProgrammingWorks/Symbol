@@ -1,54 +1,96 @@
 'use strict';
 
-let util = require('util');
 
 let obj = {
   name: 'Gena',
   age: 12,
-   [Symbol.for('secret')]: 'some secret information',
-  // rang: 11,
-  // [Symbol.for('simple')]: 'simple information',
-  
+  [Symbol.for('secret')]: 'some secret information',
+  [Symbol.for('notsecret')]: 'some not secret information',
+  get getter() {
+    return 12
+  },
+  set setter(value) {},
+  get _debugOutputSecretField() {
+    return this[Symbol.for('secret')]
+  } 
+}
+
+Object.defineProperty(obj, 'name', {
+  enumerable: false
+})
+
+
+//If an ordinary user wants to overwrite a secret field, 
+//we can not throw error or forbid it, 
+//since then he will understand that the field is occupied. 
+//Instead, all calls to the secret field, after being recorded by the ordinary user, 
+//will be redirected to a specially created field simulating a secret field, 
+//and storing information that the user tried to write to the secret field
+
+obj = {
+  realObj: Object.assign(obj),
+  simulateSecretField: undefined
 }
 
 
 obj = new Proxy(obj, {
-   ownKeys: (trap) => {
-       console.log('ownKeys Conect')
-    // //   console.log(trap)
-    
-  //   // if (Symbol.for('secret') in trap) {
-    //   //   let propNames = Object.getOwnPropertyNames(trap);
-  //   //   let symbNames = Object.getOwnPropertySymbols(trap);
-  //   //   let indexField = symbNames.indexOf(Symbol.for('field'));
-  //   //   symbNames.splice(indexField - 1, 1);
-  //   //   let res = propNames.concat(symbNames);
-  //   //   console.log('@@ОТДАСТ::', res);
-  //   //   return res
-  //   // } else {
-    //     //  console.log('@@ОТДАСТ::',Object.keys(trap))
-    
-          return Reflect.ownKeys(trap)
-    //  }
+  ownKeys: (target) => {
+    console.log('ownKe')
+    if (Symbol.for('secret') in target.realObj) {
+      let properties = Reflect.ownKeys(target.realObj);
+      let indexField = properties.indexOf(Symbol.for('field'));
+      properties.splice(indexField - 1, 1);
+      if (target.simulateSecretField) {
+        properties = properties.concat(Symbol.for('secret'))
+        console.log('GOOOOOOOOOOOOOOOOOOOOOOOOOOOD', properties)
+      }
+      return properties
+    } else {    
+      return Reflect.ownKeys(target)
+    }
   },
   
-  getOwnPropertyDescriptor: (trap, prop) => {
-    console.log('getOwnPropertyDescriptor');
-    if (prop = Symbol.for('secret')) {
+  get: (target, property) => {
+    console.log('GET CONNECT on property', property);
+    if (property === Symbol.for('secret') && target.simulateSecretField) {
+      return target.simulateSecretField;
+    };
+    if (property === Symbol.for('secret') && target.simulateSecretField === undefined) {
       return undefined;
     }
-    return {enumerable: true, writable: true, configurable: true, value: 1}
-    
+    return target.realObj[property];  
   },
-  enumerate: (targ) => {
-    console.log('ENUMERABLE CONECT')
-    return ['name'][Symbol.iterator];
+  set: (target, property, value) => {
+    if (property === Symbol.for('secret')) {
+      return Reflect.set(target, 'simulateSecretField', value);
+    } else {
+      return Reflect.set(target.realObj, property, value);
+    }
+  },
+  getOwnPropertyDescriptor: (target, property) => {
+    console.log('getOwnPropertyDescriptor: ', property);
+    if (property === Symbol.for('secret') && target.simulateSecretField) {
+      return  Object.getOwnPropertyDescriptor(target, 'simulateSecretField');
+    };
+    if (property === Symbol.for('secret') && target.simulateSecretField === undefined) {
+      return undefined;
+    }
+    return Object.getOwnPropertyDescriptor(target.realObj, property)  
+  },
+
+
+
+  enumerate: (target) => {
+    console.log('ENUMERABLE CONECT');
+    return target.keys[Symbol.iterator];
   }, 
-  get: (targer, property) => {
-    console.log('GET CONECT');
-    console.log('GET __ PROP:', property)
-    console.log(targer[property])
-    return 123
+  deleteProperty(target, property) {
+    if (property !== Symbol.for('secret')) {
+      delete target.realObj[property]
+    } else if (property === Symbol.for('secret') && target.simulateSecretField) {
+      target.simulateSecretField = undefined;
+    }
+    return true
   },
   getPrototypeOf: (target) => {
     console.log('getPrototypeOf');
@@ -70,25 +112,26 @@ obj = new Proxy(obj, {
     console.log('defineProperty');
     return true
   },
-  has: (target, key) => {
-    console.log('has');
-    return false
-  },
+ 
   construct: (target) => {
     console.log('construct');
     return undefined
   }
 });
 
+console.log(obj);
+
+
+
 // console.log(obj)
 //console.log('otl', obj)
 // console.log('KLYC:  ', Object.keys(obj))
 // // console.log('START')
 // console.log(Object.keys(obj))
-console.log(Object.getOwnPropertyNames(obj))
+// console.log(Object.getOwnPropertyNames(obj))
 
 
-
+//console.log(Object.keys(obj))
 // getPrototypeOf – перехватывает обращение к методу getPrototypeOf.
 // setPrototypeOf – перехватывает обращение к методу setPrototypeOf.
 // isExtensible – перехватывает обращение к методу isExtensible.
@@ -103,3 +146,31 @@ console.log(Object.getOwnPropertyNames(obj))
 // ownKeys – перехватывает обращения к методу getOwnPropertyNames.
 // apply – перехватывает вызовы target().
 // construct – перехватывает вызовы new target().
+
+
+console.dir(obj, {
+  showHidden: true,
+  depth: null
+})
+
+console.log(obj[Symbol.for('secret')]);
+obj[Symbol.for('secret')] = 123;
+console.log('start      --')
+console.dir(obj, {
+  showHidden: true,
+  depth: null
+})
+console.log(obj[Symbol.for('secret')]);
+console.log(obj.debugOutput)
+
+
+console.log(Symbol.for('secret') in obj)
+
+for (let i in obj) {
+  console.log(i)
+}
+console.log(obj[Symbol.for('secret')]);
+delete obj[Symbol.for('secret')];
+
+console.log(obj[Symbol.for('secret')]);
+console.log(obj._debugOutputSecretField);
