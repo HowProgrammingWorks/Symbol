@@ -1,42 +1,42 @@
 'use strict';
 
-//If an ordinary user wants to overwrite a secret field, 
-//we can not throw error or forbid it, 
-//since then he will understand that the field is occupied. 
-//Instead, all calls to the secret field, after being recorded by the ordinary user, 
-//will be redirected to a specially created field simulating a secret field, 
-//and storing information that the user tried to write to the secret field
+// If an ordinary user wants to overwrite a secret field,
+// we can not throw error or forbid it,
+// since then he will understand that the field is occupied.
+// Instead, all calls to the secret field, after being recorded by the ordinary user,
+// will be redirected to a specially created field simulating a secret field,
+// and storing information that the user tried to write to the secret field
 
 function hideSymbol(obj, symbol) {
   obj = {
     realObj: Object.assign(obj),
     simulateSecretField: undefined
-  }
+  };
   obj = new Proxy(obj, {
     ownKeys: (target) => {
       if (symbol in target.realObj) {
         let properties = Reflect.ownKeys(target.realObj);
-        let indexField = properties.indexOf(symbol);
+        const indexField = properties.indexOf(symbol);
         properties.splice(indexField, 1);
         if (target.simulateSecretField) {
-          properties = properties.concat(symbol)
+          properties = properties.concat(symbol);
         }
-        return properties
-      } else {    
-        return Reflect.ownKeys(target)
+        return properties;
+      } else {
+        return Reflect.ownKeys(target);
       }
     },
-    
+
     get: (target, property) => {
       if (property === symbol && target.simulateSecretField) {
         return target.simulateSecretField;
-      };
+      }
       if (property === symbol && target.simulateSecretField === undefined) {
         return undefined;
       }
-      return target.realObj[property];  
+      return target.realObj[property];
     },
-  
+
     set: (target, property, value) => {
       if (property === symbol) {
         return Reflect.set(target, 'simulateSecretField', value);
@@ -44,32 +44,32 @@ function hideSymbol(obj, symbol) {
         return Reflect.set(target.realObj, property, value);
       }
     },
-  
+
     getOwnPropertyDescriptor: (target, property) => {
       if (property === symbol && target.simulateSecretField) {
         return  Object.getOwnPropertyDescriptor(target, 'simulateSecretField');
-      };
+      }
       if (property === symbol && target.simulateSecretField === undefined) {
         return undefined;
       }
-      return Reflect.getOwnPropertyDescriptor(target.realObj, property)  
+      return Reflect.getOwnPropertyDescriptor(target.realObj, property);
     },
-  
+
     enumerate: (target) => {
       return target.keys[Symbol.iterator];
-    }, 
-  
+    },
+
     deleteProperty(target, property) {
       if (property !== symbol) {
-        delete target.realObj[property]
+        delete target.realObj[property];
       } else if (property === symbol && target.simulateSecretField) {
         target.simulateSecretField = undefined;
       }
-      return true
+      return true;
     },
   });
-  return obj
+  return obj;
 }
 
-module.exports = hideSymbol
+module.exports = hideSymbol;
 

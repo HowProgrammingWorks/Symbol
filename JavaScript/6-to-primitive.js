@@ -2,31 +2,26 @@
 
 console.log('"toPrimitive" in Symbol', 'toPrimitive' in Symbol);
 
-let person = {
+const person = {
   name: 'Gena',
   age: 19
-}
+};
 
 person[Symbol.toPrimitive] = function(hint) {
-  console.log('need', hint);
-  let primitives = {
-    number: () => {
-      return this.age
-    },
-    string: () => {
-      return this.name
-    },
-    default: () => {
-      return undefined;
-    }
-  }
+  console.log('hint', hint);
+  const primitives = {
+    number: () => this.age,
+    string: () => this.name,
+    default: () => JSON.stringify(person)
+  };
   return primitives[hint]();
-}
+};
 
 Object.defineProperty(person, Symbol.toPrimitive, {
   enumerable: false,
   configurable: false
-})
+});
 
-console.log({ person });
-console.log('person.toString():', JSON.stringify(person));
+console.log(+person);
+console.log(`${person}`);
+console.log(person + '');
