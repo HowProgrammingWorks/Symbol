@@ -49,7 +49,6 @@ console.log(obj[Symbol.for('secret')]);
 console.log('\x1b[4mconsole.log(Object.entries(obj)):\x1b[0m');
 console.log(Object.entries(obj));
 
-
 // we have added an opcional method _debugOutputSecretField,
 // to check at the end of the work that the information in the secret field was left
 // This is the only way to verify this information
@@ -98,7 +97,6 @@ console.log(obj[Symbol.for('secret')]);
 console.log('\x1b[4mconsole.log(Object.entries(obj)):\x1b[0m');
 console.log(Object.entries(obj));
 
-
 // overwrite:
 console.log('\n\x1b[4m[Symbol.for("secret")] = "overwrite value"\x1b[0m');
 obj[Symbol.for('secret')] = 'overwrite value';
@@ -112,9 +110,7 @@ console.log(Object.getOwnPropertySymbols(obj));
 console.log('\x1b[4mconsole.log(obj[Symbol.for("secret")])\x1b[0m');
 console.log(obj[Symbol.for('secret')]);
 
-
 // in fact, in the secret field our line is still stored
-
 console.log('\n\nREAL VALUE OF obj[Symbol.for("secret")]:\n\n');
 console.log('\x1b[4mconsole.log(obj._debugOutputSecretField):\x1b[0m');
 console.log(obj._debugOutputSecretField);
