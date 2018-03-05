@@ -1,10 +1,10 @@
 'use strict';
 
-const hideSymbol = require(__dirname + '/7-hide-symbols.js');
+const hideSymbol = require('./7-hide-symbols.js');
 
 let obj = {
-  name: 'Gena',
-  age: 12,
+  name: 'Marcus Aurelius',
+  born: 121,
   [Symbol.for('secret')]: 'some secret information',
   [Symbol.for('notsecret')]: 'some not secret information',
   get getter() {
