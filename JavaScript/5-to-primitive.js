@@ -22,6 +22,8 @@ Object.defineProperty(person, Symbol.toPrimitive, {
   configurable: false
 });
 
+// Usage:
+
 console.log(+person);
 console.log(`${person}`);
 console.log(person + '');
