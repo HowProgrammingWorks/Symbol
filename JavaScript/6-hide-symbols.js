@@ -1,4 +1,3 @@
-'use strict';
 
 // If an ordinary user wants to overwrite a secret field,
 // we can not throw error or forbid it,

@@ -1,7 +1,10 @@
 'use strict';
 
-const hideSymbol = require('./7-hide-symbols.js');
+const hideSymbol = require('./6-hide-symbols.js');
 
+// we have added an opcional method _debugOutputSecretField,
+// to check at the end of the work that the information in the secret field was left
+// This is the only way to verify this information
 let obj = {
   name: 'Marcus Aurelius',
   born: 121,
@@ -10,7 +13,10 @@ let obj = {
   get getter() {
     return 'GETTER';
   },
-  set setter(value) {}
+  set setter(value) {},
+  get _debugOutputSecretField() {
+    return this[Symbol.for('secret')];
+  }
 };
 
 console.log('\n\nBEFORE PROXYING:\n\n');
@@ -49,14 +55,6 @@ console.log(obj[Symbol.for('secret')]);
 console.log('\x1b[4mconsole.log(Object.entries(obj)):\x1b[0m');
 console.log(Object.entries(obj));
 
-// we have added an opcional method _debugOutputSecretField,
-// to check at the end of the work that the information in the secret field was left
-// This is the only way to verify this information
-Object.defineProperty(obj, '_debugOutputSecretField', {
-  enumerable: false,
-  get: () => this[Symbol.for('secret')],
-  configurable: true
-});
 
 // proxying:
 obj = hideSymbol(obj, Symbol.for('secret'));
