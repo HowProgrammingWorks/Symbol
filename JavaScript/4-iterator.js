@@ -24,6 +24,8 @@ Object.defineProperty(generateNumbersObject, Symbol.iterator, {
   configurable: false
 });
 
+// Usage:
+
 console.dir(generateNumbersObject);
 console.log(Object.getOwnPropertySymbols(generateNumbersObject));
 
