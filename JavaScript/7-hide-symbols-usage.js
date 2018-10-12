@@ -24,10 +24,7 @@ console.log('\x1b[4mconsole.log("obj"):\x1b[0m');
 console.log(obj);
 
 console.log('\x1b[4mconsole.dir("obj"):\x1b[0m');
-console.dir(obj, {
-  showHidden: true,
-  depth: null
-});
+console.dir(obj, { showHidden: true, depth: null });
 
 console.log('\x1b[4mObject.getOwnPropertyNames:\x1b[0m');
 console.log(Object.getOwnPropertyNames(obj));
@@ -36,7 +33,8 @@ console.log('\x1b[4mObject.getOwnPropertySymbols:\x1b[0m');
 console.log(Object.getOwnPropertySymbols(obj));
 
 console.log(
-  '\x1b[4mconsole.log(Object.getOwnPropertyDescriptor(obj, Symbol.for("secret")))\x1b[0m'
+  '\x1b[4mconsole.log(Object.getOwnPropertyDescriptor(obj, ' +
+  'Symbol.for("secret")))\x1b[0m'
 );
 console.log(Object.getOwnPropertyDescriptor(obj, Symbol.for('secret')));
 
@@ -49,9 +47,6 @@ console.log(obj[Symbol.for('secret')]);
 console.log('\x1b[4mconsole.log(Object.entries(obj)):\x1b[0m');
 console.log(Object.entries(obj));
 
-// we have added an opcional method _debugOutputSecretField,
-// to check at the end of the work that the information in the secret field was left
-// This is the only way to verify this information
 Object.defineProperty(obj, '_debugOutputSecretField', {
   enumerable: false,
   get: () => this[Symbol.for('secret')],
@@ -84,7 +79,8 @@ console.log('\x1b[4mObject.getOwnPropertySymbols:\x1b[0m');
 console.log(Object.getOwnPropertySymbols(obj));
 
 console.log(
-  '\x1b[4mconsole.log(Object.getOwnPropertyDescriptor(obj, Symbol.for("secret")))\x1b[0m'
+  '\x1b[4mconsole.log(Object.getOwnPropertyDescriptor(obj, ' +
+  'Symbol.for("secret")))\x1b[0m'
 );
 console.log(Object.getOwnPropertyDescriptor(obj, Symbol.for('secret')));
 
@@ -110,7 +106,6 @@ console.log(Object.getOwnPropertySymbols(obj));
 console.log('\x1b[4mconsole.log(obj[Symbol.for("secret")])\x1b[0m');
 console.log(obj[Symbol.for('secret')]);
 
-// in fact, in the secret field our line is still stored
 console.log('\n\nREAL VALUE OF obj[Symbol.for("secret")]:\n\n');
 console.log('\x1b[4mconsole.log(obj._debugOutputSecretField):\x1b[0m');
 console.log(obj._debugOutputSecretField);

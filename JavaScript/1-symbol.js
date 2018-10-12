@@ -6,9 +6,11 @@ const symbol2 = Symbol();
 console.dir(symbol1);
 console.log(JSON.stringify(symbol1));
 
-const eq = symbol1 === symbol2;
-console.log('symbol1 === symbol2 : ' + eq);
+const eq1 = symbol1 === symbol2;
+console.log('Symbol() === Symbol() :', eq1);
 
-if (Symbol('name') !== Symbol('name')) {
-  console.log('Symbols with identical description are not equal');
-}
+const symbol3 = Symbol('name');
+const symbol4 = Symbol('name');
+
+const eq2 = symbol3 === symbol4;
+console.log('Symbol(\'name\') === Symbol(\'name\') :', eq2);

@@ -2,10 +2,7 @@
 
 console.log('"toPrimitive" in Symbol', 'toPrimitive' in Symbol);
 
-const person = {
-  name: 'Gena',
-  age: 19
-};
+const person = { name: 'Gena', age: 19 };
 
 person[Symbol.toPrimitive] = function(hint) {
   console.log('hint', hint);
@@ -19,7 +16,7 @@ person[Symbol.toPrimitive] = function(hint) {
 
 Object.defineProperty(person, Symbol.toPrimitive, {
   enumerable: false,
-  configurable: false
+  configurable: false,
 });
 
 // Usage:
