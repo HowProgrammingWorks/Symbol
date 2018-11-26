@@ -20,13 +20,14 @@ Object.defineProperty(generateNumbersObject, Symbol.iterator, {
 });
 
 console.dir(generateNumbersObject);
+
 console.log(Object.getOwnPropertySymbols(generateNumbersObject));
 
 for (const number of generateNumbersObject) {
   console.log(number);
 }
 
-const useIterable = (...iterableObject) => iterableObject
+const useIterable = (...iterableObjects) => iterableObjects
   .reduce((prev, cur) => prev + cur);
 
 const sum = useIterable(...generateNumbersObject);
