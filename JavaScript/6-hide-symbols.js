@@ -6,7 +6,7 @@ const hideSymbol = (obj, symbol) => {
     simulateSecretField: undefined,
   };
   obj = new Proxy(obj, {
-    ownKeys: target => {
+    ownKeys: (target) => {
       if (symbol in target.realObj) {
         let properties = Reflect.ownKeys(target.realObj);
         const indexField = properties.indexOf(symbol);
@@ -48,7 +48,7 @@ const hideSymbol = (obj, symbol) => {
       return Reflect.getOwnPropertyDescriptor(target.realObj, property);
     },
 
-    enumerate: target => target.keys[Symbol.iterator],
+    enumerate: (target) => target.keys[Symbol.iterator],
 
     deleteProperty(target, property) {
       if (property !== symbol) {
