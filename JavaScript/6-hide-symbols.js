@@ -21,11 +21,8 @@ const hideSymbol = (obj, symbol) => {
     },
 
     get: (target, property) => {
-      if (property === symbol && target.simulateSecretField) {
+      if (property === symbol) {
         return target.simulateSecretField;
-      }
-      if (property === symbol && target.simulateSecretField === undefined) {
-        return undefined;
       }
       return target.realObj[property];
     },
