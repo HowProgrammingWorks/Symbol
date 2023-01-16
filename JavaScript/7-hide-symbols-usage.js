@@ -1,6 +1,6 @@
 'use strict';
 
-const hideSymbol = require('./7-hide-symbols.js');
+const hideSymbol = require('./6-hide-symbols.js');
 
 let obj = {
   name: 'Marcus Aurelius',
