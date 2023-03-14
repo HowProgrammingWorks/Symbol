@@ -49,7 +49,9 @@ console.log(Object.entries(obj));
 
 Object.defineProperty(obj, '_debugOutputSecretField', {
   enumerable: false,
-  get: () => this[Symbol.for('secret')],
+  get() {
+    return this[Symbol.for('secret')];
+  },
   configurable: true
 });
 
