@@ -10,7 +10,7 @@ let obj = {
   get getter() {
     return 'GETTER';
   },
-  set setter(value) {}
+  set setter(value) {},
 };
 
 console.log('\n\nBEFORE PROXYING:\n\n');
@@ -34,7 +34,7 @@ console.log(Object.getOwnPropertySymbols(obj));
 
 console.log(
   '\x1b[4mconsole.log(Object.getOwnPropertyDescriptor(obj, ' +
-  'Symbol.for("secret")))\x1b[0m'
+    'Symbol.for("secret")))\x1b[0m',
 );
 console.log(Object.getOwnPropertyDescriptor(obj, Symbol.for('secret')));
 
@@ -71,7 +71,7 @@ console.log(obj);
 console.log('\x1b[4mconsole.dir("obj"):\x1b[0m');
 console.dir(obj, {
   showHidden: true,
-  depth: null
+  depth: null,
 });
 
 console.log('\x1b[4mObject.getOwnPropertyNames:\x1b[0m');
@@ -82,7 +82,7 @@ console.log(Object.getOwnPropertySymbols(obj));
 
 console.log(
   '\x1b[4mconsole.log(Object.getOwnPropertyDescriptor(obj, ' +
-  'Symbol.for("secret")))\x1b[0m'
+    'Symbol.for("secret")))\x1b[0m',
 );
 console.log(Object.getOwnPropertyDescriptor(obj, Symbol.for('secret')));
 

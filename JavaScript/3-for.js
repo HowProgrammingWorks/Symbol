@@ -6,7 +6,7 @@ const symbol2 = Symbol.for('name');
 if (symbol1 === symbol2) {
   console.log(
     'Symbols with identical description ' +
-    'from global registry list are equal'
+      'from global registry list are equal',
   );
 }
 
@@ -21,11 +21,11 @@ const symbol3 = Symbol('name2');
 
 console.log(
   'key for symbol from global registry list:',
-  Symbol.keyFor(symbol1)
+  Symbol.keyFor(symbol1),
 );
 console.log(
   'key for symbol which isnt in global registry list:',
-  Symbol.keyFor(symbol3)
+  Symbol.keyFor(symbol3),
 );
 
 console.log(symbol1[Symbol.toPrimitive]());

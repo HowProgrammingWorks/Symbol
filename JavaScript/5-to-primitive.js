@@ -4,12 +4,12 @@ console.log('"toPrimitive" in Symbol', 'toPrimitive' in Symbol);
 
 const person = { name: 'Gena', age: 19 };
 
-person[Symbol.toPrimitive] = function(hint) {
+person[Symbol.toPrimitive] = function (hint) {
   console.log('hint', hint);
   const primitives = {
     number: () => this.age,
     string: () => this.name,
-    default: () => JSON.stringify(person)
+    default: () => JSON.stringify(person),
   };
   return primitives[hint]();
 };

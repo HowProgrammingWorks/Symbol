@@ -13,4 +13,4 @@ const symbol3 = Symbol('name');
 const symbol4 = Symbol('name');
 
 const eq2 = symbol3 === symbol4;
-console.log('Symbol(\'name\') === Symbol(\'name\') :', eq2);
+console.log("Symbol('name') === Symbol('name') :", eq2);
